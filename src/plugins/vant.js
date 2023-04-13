@@ -1,0 +1,78 @@
+import Vue from 'vue';
+import {
+  Button,
+  Cell,
+  CellGroup,
+  Icon,
+  Toast,
+  Field,
+  Form,
+  NoticeBar,
+  Search,
+  Image as VanImage,
+  NavBar,
+  RadioGroup,
+  Radio,
+  Row,
+  Col,
+  GoodsAction, GoodsActionIcon, GoodsActionButton,
+  Picker,
+  Popup,
+  Tab,
+  Tabs,
+  Dialog,
+  Empty,
+  Tag,
+  PullRefresh,
+  List,
+  Grid,
+  GridItem,
+  Checkbox,
+  CheckboxGroup,
+  SwipeCell,
+  Card,
+  Badge,
+  DropdownMenu,
+  DropdownItem,
+  Calendar,
+  Popover,
+} from 'vant';
+
+Vue.use(Icon);
+Vue.use(Cell);
+Vue.use(CellGroup);
+Vue.use(Button);
+Vue.use(Toast);
+Vue.use(Field);
+Vue.use(Form);
+Vue.use(NoticeBar);
+Vue.use(Search);
+Vue.use(VanImage);
+Vue.use(NavBar);
+Vue.use(Radio);
+Vue.use(RadioGroup);
+Vue.use(Col);
+Vue.use(Row);
+Vue.use(GoodsAction);
+Vue.use(GoodsActionButton);
+Vue.use(GoodsActionIcon);
+Vue.use(Picker);
+Vue.use(Popup);
+Vue.use(Tab);
+Vue.use(Tabs);
+Vue.use(Dialog);
+Vue.use(Empty);
+Vue.use(Tag);
+Vue.use(PullRefresh);
+Vue.use(List);
+Vue.use(Grid);
+Vue.use(GridItem);
+Vue.use(Checkbox);
+Vue.use(CheckboxGroup);
+Vue.use(SwipeCell);
+Vue.use(Card);
+Vue.use(Badge);
+Vue.use(DropdownMenu);
+Vue.use(DropdownItem);
+Vue.use(Calendar);
+Vue.use(Popover);
