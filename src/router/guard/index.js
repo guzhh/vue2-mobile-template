@@ -1,13 +1,26 @@
 import NProgress from 'nprogress';
 import 'nprogress/nprogress.css';
 import { isLogin } from '@/utils/auth';
+import store from '@/store';
 import router, { resetRouter } from '../index';
+
+const loginRoutePath = '/login';
 
 router.beforeEach((to, from, next) => {
   NProgress.start();
   if (to.meta?.auth) {
     if (isLogin()) {
-      next();
+      if (store.getters.userId) {
+        next();
+      } else {
+        store.dispatch('GetInfo').then(() => {
+          next();
+        }).catch(() => {
+          store.dispatch('Logout').then(() => {
+            next({ path: loginRoutePath });
+          });
+        });
+      }
     } else {
       resetRouter();
       next({ name: 'Login', replace: true, query: { ...to.query, redirectPath: to.path } });

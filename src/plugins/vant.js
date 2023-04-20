@@ -15,6 +15,7 @@ import {
   Radio,
   Row,
   Col,
+  Sticky,
   GoodsAction, GoodsActionIcon, GoodsActionButton,
   Picker,
   Popup,
@@ -76,3 +77,4 @@ Vue.use(DropdownMenu);
 Vue.use(DropdownItem);
 Vue.use(Calendar);
 Vue.use(Popover);
+Vue.use(Sticky);

@@ -15,7 +15,7 @@ not ie 11
 #cover 99.5% in my stats :使用定制的浏览器统计数据。
 #maintained node versions :所有还被 node 基金会维护的 node 版本。
 #node 10 and node 10.4 : 最新的 node 10.x.x 或者10.4.x 版本。
-#current node :当前被 browserslist 使用的 node 版本。
+#current node : 当前被 browserslist 使用的 node 版本。
 #extends browserslist-config-mycompany :来自browserslist-config-mycompany包的查询设置
 #ie 6-8 : 选择一个浏览器的版本范围。
 #Firefox > 20 : 版本高于20的所有火狐浏览器版本。>=,<,<=同样适用。

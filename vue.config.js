@@ -13,7 +13,19 @@ function resolve(dir) {
 module.exports = defineConfig({
   publicPath: `/${packageJson.name}/`, // publicPath, // 在文件引用路径前加前缀
   outputDir: packageJson.name, // 打包输出目录
+  // 放置静态资源目录
+  assetsDir: 'static',
+  productionSourceMap: false, // 是否在生产环境中使用 sourcemap，用于定位到错误源码。(不建议使用，会影响打包速度，且会让人看到自己的代码)
   transpileDependencies: true,
+  terser: {
+    // 打包之后去除console、debugger
+    terserOptions: {
+      compress: {
+        drop_console: true,
+        drop_debugger: true,
+      },
+    },
+  },
   chainWebpack: (config) => {
     config.resolve.alias
       .set('@$', resolve('src'));
@@ -35,6 +47,13 @@ module.exports = defineConfig({
         symbolId: 'icon-[name]',
       })
       .end();
+
+    // 设置项目标题
+    config.plugin('html').tap((args) => {
+      const options = [...args];
+      options[0].title = process.env.VUE_APP_SYSTEM_NAME;
+      return options;
+    });
   },
   css: {
     loaderOptions: {
@@ -51,29 +70,30 @@ module.exports = defineConfig({
   },
   devServer: {
     port: 7788,
-    // proxy: {
-    //   [`${process.env.VUE_APP_API_BASE_URL}`]: {
-    //     target: 'http://127.0.0.1:9100',
-    //     ws: false,
-    //     changeOrigin: true,
-    //   },
-    // },
+    proxy: {
+      [`${process.env.VUE_APP_API_BASE_URL}`]: {
+        target: 'http://127.0.0.1:7200',
+        ws: false,
+        changeOrigin: true,
+      },
+    },
   },
   configureWebpack: {
     plugins: (() => {
-      if (!isProd) {
-        return [];
+      const plugins = [];
+      if (isProd) {
+        plugins.push(
+          new CompressionPlugin({
+            filename: '[path].gz[query]',
+            algorithm: 'gzip',
+            test: new RegExp(`\\.(${productionGzipExtensions.join('|')})$`), // 匹配文件名
+            threshold: 10240, // 对10K以上的数据进行压缩
+            minRatio: 0.8,
+            deleteOriginalAssets: false, // 是否删除源文件
+          }),
+        );
       }
-      return [
-        new CompressionPlugin({
-          filename: '[path].gz[query]',
-          algorithm: 'gzip',
-          test: new RegExp(`\\.(${productionGzipExtensions.join('|')})$`), // 匹配文件名
-          threshold: 10240, // 对10K以上的数据进行压缩
-          minRatio: 0.8,
-          deleteOriginalAssets: false, // 是否删除源文件
-        }),
-      ];
+      return plugins;
     })(),
   },
 });

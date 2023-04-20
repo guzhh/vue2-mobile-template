@@ -7,12 +7,12 @@ Vue.use(VueRouter);
 const routes = [
   {
     path: '/',
-    name: 'home',
+    name: 'Home',
     component: HomeView,
     meta: {
       title: '首页', // 页面标题
       keepAlive: false, // 是否缓存
-      auth: false, // 是否验证登录
+      auth: true, // 是否验证登录
     },
   },
   {

@@ -1,4 +1,4 @@
-// import { showLoadingToast, showFailToast, showSuccessToast } from 'vant';
+import qs from 'qs';
 import { Toast } from 'vant';
 import { getToken, clearToken } from '@/utils/auth';
 import { encryptByCBC, decryptByCBC } from '@/utils/secret';
@@ -11,7 +11,8 @@ export default new Request({
   baseURL: process.env.VUE_APP_API_BASE_URL,
   timeout: 1000 * 60 * 2,
   headers: {
-    'Content-Type': 'application/json;charset=UTF-8',
+    'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8', //
+    'device-flag': 'mobile',
   },
   // 实例级拦截器
   interceptors: {
@@ -19,26 +20,25 @@ export default new Request({
     requestInterceptor: (config) => {
       // 打开全局请求loading
       if (config.customs?.isLoading) {
-        // eslint-disable-next-line no-param-reassign
         config.customs.loadingInstance = Toast.loading({
           duration: 0,
           forbidClick: true,
           message: config.customs?.loadingText || '数据加载中...',
         });
       }
-      // 请求是否加密
-      if (process.env.VUE_APP_IS_SECRET === 1 || process.env.VUE_APP_IS_SECRET === '1') {
-        // eslint-disable-next-line no-param-reassign
-        config.data = encryptByCBC({ message: JSON.stringify(config.data) });
-      }
       // 防止缓存，给get请求加上时间戳
       if (config.method === 'get' || config.method === 'GET') {
-        // eslint-disable-next-line no-param-reassign
         config.params = { ...config.params, t: new Date().getTime() };
+      }
+      // 请求是否加密
+      if (process.env.VUE_APP_IS_SECRET === 1 || process.env.VUE_APP_IS_SECRET === '1') {
+        config.headers['Content-Type'] = 'application/json;charset=UTF-8';
+        config.data = encryptByCBC({ message: JSON.stringify(config.data) });
+      } else if (config.headers['Content-Type'] === 'application/x-www-form-urlencoded;charset=UTF-8') {
+        config.data = qs.stringify(config.data);
       }
       const token = getToken();
       if (token) {
-        // eslint-disable-next-line no-param-reassign
         config.headers[ACCESS_TOKEN] = token;
       }
       return config;
@@ -55,7 +55,6 @@ export default new Request({
         response.data = JSON.parse(decryptByCBC({ message: response.data }));
       }
       if (response.status === 203) {
-        // window.$notification({ title: '登录过期', message: response.data.message, type: 'error' });
         Toast.fail({ message: `登录过期：${response.data.message}` });
         clearToken();
       } else if (response.data?.status === '403') {

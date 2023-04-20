@@ -11,7 +11,7 @@ const key = Symbol('CODE_CHANGE');
 let latestCode = null;
 
 /**
- * 发布默认机构变化
+ * 发布监听到扫码
  * @param to
  */
 export function setOrgEmitter(code) {
